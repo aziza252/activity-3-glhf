@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Promotions{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>🔥 Limited Time Offers</h2>
+    <hr>
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ url_for('admin.get_image', filename=item.product_picture.split('/')[-1]) }}" class="card-img-top" alt="{{ item.product_name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.product_name }}</h5>
+                        <p class="card-text">
+                            <del>${{ item.previous_price }}</del>
+                            <strong class="text-danger">${{ item.current_price }}</strong>
+                        </p>
+                        <span class="badge bg-danger">Flash Sale</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No promotions are currently active.</p>
+    {% endif %}
+</div>
+{% endblock %}

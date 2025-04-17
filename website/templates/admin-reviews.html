@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Customer Reviews{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Customer Reviews</h2>
+    <hr>
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.name }} ({{ review.email }})</h5>
+                    <h6 class="card-subtitle text-muted">{{ review.date_submitted.strftime('%Y-%m-%d %H:%M') }}</h6>
+                    <p class="card-text mt-2">{{ review.comment }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No reviews submitted yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

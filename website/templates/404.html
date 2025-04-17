@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<style>
+  .center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(127, 24, 24);
+  }
+</style>
+
+<div class="center-container">
+  <img src="{{ url_for('static', filename='images/404.png') }}" alt="404Error">
+</div>
+{% endblock %}

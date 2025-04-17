@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %} Menu {% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h2 class="text-center mb-4 text-white">Our Menu</h2>
+
+    <form method="GET" action="/menu" class="mb-4" style="max-width: 500px; margin: auto;">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search menu items..." value="{{ search_query or '' }}">
+            <button class="btn btn-dark" type="submit">Search</button>
+        </div>
+    </form>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.product_picture }}" class="card-img-top" alt="{{ product.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.product_name }}</h5>
+
+                    <p class="card-text">Price: ${{ product.current_price }}</p>
+
+                    {% if product.previous_price and product.previous_price != product.current_price %}
+                        <p class="card-text text-muted text-decoration-line-through">
+                            ${{ product.previous_price }}
+                        </p>
+                    {% endif %}
+
+                    {% if product.flash_sale %}
+                        <span class="badge bg-danger">Flash Sale!</span>
+                    {% endif %}
+
+                    <form method="POST" action="/add-to-cart/{{ product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Add to Cart</button>
+                    </form>
+
+                    <form method="POST" action="/favourite/{{ product.id }}">
+                        <button type="submit" class="btn btn-outline-danger btn-sm mt-2">
+                            ♥ Favourite
+                        </button>
+                    </form>
+                    
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

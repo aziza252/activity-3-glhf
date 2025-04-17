@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif;
+    background: linear-gradient(to right, #fffaf5, #fef7f1);
+    color: #2c3e50;
+  }
+
+  .restaurant-contact {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .restaurant-contact h1 {
+    font-size: 3rem;
+    color: #b33939;
+    margin-bottom: 10px;
+  }
+
+  .decorative-line {
+    width: 60px;
+    height: 4px;
+    background-color: #b33939;
+    margin-bottom: 30px;
+    border-radius: 5px;
+  }
+
+  .restaurant-contact p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #555;
+  }
+
+  .phone-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 40px;
+  }
+
+  form {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: left;
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  form input, form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+  }
+
+  form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  form button {
+    background-color: #b33939;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  form button:hover {
+    background-color: #962d2d;
+  }
+</style>
+
+<div class="restaurant-contact">
+  <h1>Contact Us</h1>
+  <div class="decorative-line"></div>
+  <p>We’d love to hear from you! Feel free to call or leave us a message below.</p>
+  <div class="phone-number">416-648-4928</div>
+
+  <form method="POST" action="/submit-review">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="comments">Comments / Review:</label>
+    <textarea id="comments" name="comments" required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+<div class="container-fluid p-0">
+    <div class="vh-100 d-flex"> 
+        <img src="{{ url_for('static', filename='images/food.jpg') }}" 
+             alt="Delicious Food"
+             class="w-100 h-auto object-fit-cover"  
+             style="min-height: 100vh;">  
+    </div>
+
+    <div id="About-US" data-aos="fade-up" >
+        <h3>About Us</h3>
+            <p> Welcome to QuickBite, where we believe that food should be as unique as you are.
+                At QuickBite, we make what you crave. No fixed menu — just fresh, fast food tailored to your taste. Whether 
+                it’s sushi, pasta, burgers, or something totally different, we cook it your way, on the spot.
+                Quick, flexible, and always flavorful. That’s how we do food.
+            </p>
+    </div>
+</div>
+
+
+
+{% endblock %}

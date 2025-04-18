@@ -19,7 +19,35 @@
                 it’s sushi, pasta, burgers, or something totally different, we cook it your way, on the spot.
                 Quick, flexible, and always flavorful. That’s how we do food.
             </p>
+            
     </div>
+    
+    {% if recommended %}
+<div class="container mt-5" data-aos="fade-up">
+    <h3 class="mb-4 text-center">Based on your previous orders, you may like:</h3>
+    <div class="row">
+        {% for product in recommended %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.product_picture }}" class="card-img-top" alt="{{ product.product_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.product_name }}</h5>
+                    <p class="card-text">Price: ${{ product.current_price }}</p>
+                    {% if product.flash_sale %}
+                        <span class="badge bg-danger">Flash Sale!</span>
+                    {% endif %}
+                    <form method="POST" action="/add-to-cart/{{ product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
 </div>
 
 

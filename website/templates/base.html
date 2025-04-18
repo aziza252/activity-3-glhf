@@ -52,9 +52,16 @@
 
           </ul>
         </div>
-
         
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+
+          {% if current_user.is_authenticated and current_user.id == 2 %}
+            <li class="nav-item mx-2">
+              <a class="nav-link text-grey" style="color: rgb(255, 255, 255);" href="/kitchen-orders">
+                Kitchen Orders <i class="fa-solid fa-utensils"></i>
+              </a>
+            </li>
+          {% endif %}
 
           <li class="nav-item dropdown mx-2">
             {% if current_user.is_authenticated %}
@@ -79,6 +86,13 @@
                 
                 
               </li>
+
+              <li class="nav-item mx-1" id="orders">
+                <a class="nav-link text-grey" style="color: rgb(0, 0, 0);" href="/order-history"><span class="badge bg-success"></span> My Orders
+                  <i class="fa-solid fa-receipt"></i>
+                </a>
+            </li>
+            
     
               <li class="nav-item mx-2" id="items">
                 <a class="nav-link text-grey" style="color: rgb(0, 0, 0);" href="/favourites"><span class="badge bg-success"></span> Favourites
@@ -103,8 +117,7 @@
                 <li><a class="dropdown-item" href="/admin-reviews">View Reviews <i class="fa-solid fa-comments"></i></a></li>
               </ul>
             </li>
-            {% endif %}
-
+            {% endif %}            
 
           <li class="nav-item dropdown mx-2">
             <a class="nav-link dropdown-toggle text-grey" style="color: rgb(255, 255, 255);" href="#" role="button", id="profileDropdown" 

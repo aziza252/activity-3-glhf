@@ -34,8 +34,12 @@
                     {% endif %}
 
                     <form method="POST" action="/add-to-cart/{{ product.id }}">
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Add to Cart</button>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2">
+                        
+                        <label for="customizations">Special Request / Description:</label>
+                        <textarea name="customizations" class="form-control mb-2" rows="2" placeholder="E.g. extra cheese, no onions..."></textarea>
+                        
+                        <button type="submit" class="btn btn-sm btn-success">Add to Cart</button>
                     </form>
 
                     <form method="POST" action="/favourite/{{ product.id }}">
@@ -43,7 +47,6 @@
                             ♥ Favourite
                         </button>
                     </form>
-                    
 
                 </div>
             </div>

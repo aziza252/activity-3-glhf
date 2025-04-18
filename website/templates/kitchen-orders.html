@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Kitchen Orders{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>🧑‍🍳 Kitchen Orders</h2>
+    <hr>
+    {% for order in orders %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>Order #{{ order.id }}</h5>
+            <p><strong>Product:</strong> {{ order.product.product_name }}</p>
+            <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+            <p><strong>Status:</strong> {{ order.kitchen_status }}</p>
+            <p><strong>Instructions:</strong> {{ order.customization or "None" }}</p>
+
+            <form method="POST" action="/update-kitchen-status/{{ order.id }}">
+                <select name="status" class="form-select mb-2" required>
+                    <option value="Pending" {% if order.kitchen_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Preparation" {% if order.kitchen_status == 'In Preparation' %}selected{% endif %}>In Preparation</option>
+                    <option value="Ready" {% if order.kitchen_status == 'Ready' %}selected{% endif %}>Ready</option>
+                </select>
+                <button class="btn btn-primary btn-sm" type="submit">Update Status</button>
+            </form>
+            
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

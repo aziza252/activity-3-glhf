@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from flask_login import login_required, current_user
-from .models import Product, Cart, Favourite
+from .models import Cart, Product, Order
 from . import db
+from datetime import datetime
+from collections import Counter
+from .models import Favourite, Review
+
 
 menu = Blueprint('menu', __name__)
 
@@ -23,24 +27,21 @@ def show_menu():
 @login_required
 def add_to_cart(product_id):
     quantity = int(request.form.get('quantity', 1))
+    customization = request.form.get('customizations', '')
 
     product = Product.query.get(product_id)
     if not product:
         flash("Product not found.")
         return redirect('/menu')
 
-    existing_item = Cart.query.filter_by(customer_link=current_user.id, product_link=product_id).first()
+    new_cart_item = Cart(
+        quantity=quantity,
+        customization=customization,
+        customer_link=current_user.id,
+        product_link=product_id
+    )
 
-    if existing_item:
-        existing_item.quantity += quantity
-    else:
-        new_cart_item = Cart(
-            quantity=quantity,
-            customer_link=current_user.id,
-            product_link=product_id
-        )
-        db.session.add(new_cart_item)
-
+    db.session.add(new_cart_item)
     db.session.commit()
     flash(f"{product.product_name} added to cart!")
     return redirect('/menu')
@@ -93,3 +94,66 @@ def remove_favourite(product_id):
         flash("Item not found in favourites.")
     return redirect('/favourites')
 
+@menu.route('/remove-from-cart/<int:cart_id>', methods=['POST'])
+@login_required
+def remove_from_cart(cart_id):
+    cart_item = Cart.query.get(cart_id)
+    if cart_item and cart_item.customer_link == current_user.id:
+        db.session.delete(cart_item)
+        db.session.commit()
+        flash('Item removed from cart.')
+    else:
+        flash('Unauthorized or item not found.')
+    return redirect('/cart')
+
+@menu.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+    cart_items = Cart.query.filter_by(customer_link=current_user.id).all()
+    total = sum(item.quantity * item.product.current_price for item in cart_items)
+
+    if not cart_items:
+        flash("Your cart is empty.")
+        return redirect('/cart')
+
+    if request.method == 'POST':
+        for item in cart_items:
+            new_order = Order(
+                quantity=item.quantity,
+                price=item.quantity * item.product.current_price,
+                status='Completed',
+                payment_id=f'pay_{datetime.utcnow().timestamp()}',
+                customer_link=current_user.id,
+                product_link=item.product.id,
+                customization=item.customization
+            )
+            db.session.add(new_order)
+            db.session.delete(item)
+        
+        db.session.commit()
+        flash("Checkout successful! Thank you for your order.")
+        return redirect('/')
+
+    return render_template('checkout.html', cart_items=cart_items, total=total)
+
+@menu.route('/order-history')
+@login_required
+def order_history():
+    orders = Order.query.filter_by(customer_link=current_user.id).order_by(Order.id.desc()).all()
+    return render_template('order_history.html', orders=orders)
+
+@menu.route('/submit-review', methods=['POST'])
+def submit_review():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    comment = request.form.get('comments')
+
+    if name and email and comment:
+        new_review = Review(name=name, email=email, comment=comment)
+        db.session.add(new_review)
+        db.session.commit()
+        flash("Thanks for your message! Our team will review it shortly.")
+    else:
+        flash("Please fill in all fields before submitting.")
+
+    return redirect('/contact-us')

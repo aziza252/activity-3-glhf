@@ -36,11 +36,14 @@ def create_app():
     from .admin import admin
     from .models import Customer, Product, Cart, Order
     from .menu import menu
+    from .kitchen import kitchen
+    
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(admin, url_prefix='/')
     app.register_blueprint(menu, url_prefix='/')
+    app.register_blueprint(kitchen, url_prefix='/')
 
     with app.app_context():
         create_database()

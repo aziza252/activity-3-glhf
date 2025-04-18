@@ -147,15 +147,15 @@ def download_report():
     if current_user.id != 1:
         return render_template('404.html')
 
-    orders = Order.query.all()
+    # Query and build all data inside the app context
+    orders = Order.query.filter_by(status='Completed').all()
+    data = [['Customer Name', 'Email', 'Product', 'Quantity', 'Price', 'Status', 'Payment ID']]
 
-    def generate():
-        data = [
-            ['Customer Name', 'Email', 'Product', 'Quantity', 'Price', 'Status', 'Payment ID']
-        ]
-        for order in orders:
-            customer = Customer.query.get(order.customer_link)
-            product = Product.query.get(order.product_link)
+    for order in orders:
+        customer = Customer.query.get(order.customer_link)
+        product = Product.query.get(order.product_link)
+
+        if customer and product:
             data.append([
                 customer.username,
                 customer.email,
@@ -165,8 +165,26 @@ def download_report():
                 order.status,
                 order.payment_id
             ])
+
+    # Define the generator AFTER all DB access
+    def generate():
         for row in data:
             yield ','.join(map(str, row)) + '\n'
 
     return Response(generate(), mimetype='text/csv',
                     headers={"Content-Disposition": "attachment;filename=order_report.csv"})
+
+
+@admin.route('/delete-review/<int:review_id>', methods=['POST'])
+@login_required
+def delete_review(review_id):
+    if current_user.id == 1:
+        review = Review.query.get(review_id)
+        if review:
+            db.session.delete(review)
+            db.session.commit()
+            flash('Review deleted successfully.')
+        else:
+            flash('Review not found.')
+        return redirect('/admin-reviews')
+    return render_template('404.html')

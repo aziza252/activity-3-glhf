@@ -18,6 +18,11 @@
                             <strong class="text-danger">${{ item.current_price }}</strong>
                         </p>
                         <span class="badge bg-danger">Flash Sale</span>
+
+                        <form method="POST" action="/add-to-cart/{{ item.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
             </div>

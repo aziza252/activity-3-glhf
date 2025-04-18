@@ -17,6 +17,12 @@
                     <p class="card-text mb-1">Unit Price: ${{ item.product.current_price }}</p>
                     <p class="card-text mb-1">Quantity: {{ item.quantity }}</p>
                     <p class="card-text fw-bold">Subtotal: ${{ '%.2f' % (item.quantity * item.product.current_price) }}</p>
+                    <p><strong>Instructions:</strong> {{ item.customization or "None" }}</p>
+                    
+                    <form method="POST" action="/remove-from-cart/{{ item.id }}">
+                        <button type="submit" class="btn btn-sm btn-danger mt-2">Remove</button>
+                    </form>
+                    
                 </div>
             </div>
         </div>
